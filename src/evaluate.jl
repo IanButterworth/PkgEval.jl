@@ -312,7 +312,9 @@ function evaluate_test(config::Configuration, pkg::Package; use_cache::Bool=true
 
         t0 = cpu_time()
         try
-            Pkg.add(; package_spec...)
+            withenv("JULIA_PKG_PRECOMPILE_AUTO" => 0) do
+                Pkg.add(; package_spec...)
+            end
 
             println("\nInstallation completed after $(elapsed(t0))")
             write("/output/installed", repr(true))
